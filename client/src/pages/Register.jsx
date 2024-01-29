@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
-import { useState, useNavigate } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -16,7 +15,7 @@ export default function Register() {
     try {
       setLoading(true);
       setError(false);
-      const res = await fetch("/server/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,8 +23,8 @@ export default function Register() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      console.log(data);
       setLoading(false);
-
       if (data.success === false) {
         setError(true);
         return;
@@ -36,7 +35,6 @@ export default function Register() {
       setError(true);
     }
   };
-
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Register</h1>
@@ -48,12 +46,11 @@ export default function Register() {
           className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
         />
-
         <input
           type="email"
           placeholder="Email"
           id="email"
-          className="bg-slate-100 p-2 rounded-lg"
+          className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
         />
         <input
