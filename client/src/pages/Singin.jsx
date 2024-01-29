@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
-import { useState, useNavigate } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function SignIn() {
+export default function Signin() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -16,7 +15,7 @@ export default function SignIn() {
     try {
       setLoading(true);
       setError(false);
-      const res = await fetch("/server/auth/signin", {
+      const res = await fetch("/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,28 +23,27 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      console.log(data);
       setLoading(false);
-
       if (data.success === false) {
         setError(true);
         return;
       }
-      navigate("/register");
+      navigate("/");
     } catch (error) {
       setLoading(false);
       setError(true);
     }
   };
-
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
+      <h1 className="text-3xl text-center font-semibold my-7">Sign in</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"
           placeholder="Email"
           id="email"
-          className="bg-slate-100 p-2 rounded-lg"
+          className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
         />
         <input
@@ -59,12 +57,12 @@ export default function SignIn() {
           disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {loading ? "Loading..." : "Sign In"}
+          {loading ? "Loading..." : "Sign in"}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
-        <p>Do not have an account?</p>
-        <Link to="/sign-in">
+        <p>Don\'t have an account?</p>
+        <Link to="/register">
           <span className="text-blue-500">Register</span>
         </Link>
       </div>
